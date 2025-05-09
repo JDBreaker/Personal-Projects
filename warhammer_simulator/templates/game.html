@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warhammer 40K Simulator - Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Warhammer 40K Simulator - Battle</h1>
+    </header>
+
+    <section id="game">
+        <h2>Battle Report:</h2>
+        
+        <!-- Show current hit points of both units -->
+        <p><strong>Unit 1 ({{ game_state['unit1'] }}) HP: {{ game_state['unit1_health'] }} / {{ UNIT_STATS[game_state['unit1']]['health'] }}</strong></p>
+        <p><strong>Unit 2 ({{ game_state['unit2'] }}) HP: {{ game_state['unit2_health'] }} / {{ UNIT_STATS[game_state['unit2']]['health'] }}</strong></p>
+
+        <pre>{{ game_state['battle_report'] | join('\n') }}</pre>
+        <p>{{ game_state['message'] }}</p>
+        
+        <form action="{{ url_for('game') }}" method="get">
+            <button type="submit">Next Turn</button>
+        </form>
+        
+        <form action="{{ url_for('restart_game') }}" method="get">
+            <button type="submit">Restart Game</button>
+        </form>
+    </section>
+</body>
+</html>
+

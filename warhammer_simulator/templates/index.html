@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warhammer 40K Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Update the unit options when a faction is selected
+        function updateUnits() {
+            var faction1 = document.getElementById('faction1').value;
+            var faction2 = document.getElementById('faction2').value;
+            
+            // Fetch units for Faction 1
+            $.get("/get_units/" + faction1, function(data) {
+                var unit1Select = document.getElementById('unit1');
+                unit1Select.innerHTML = ''; // Clear existing options
+                data.units.forEach(function(unit) {
+                    var option = document.createElement('option');
+                    option.value = unit;
+                    option.text = unit;
+                    unit1Select.appendChild(option);
+                });
+            });
+
+            // Fetch units for Faction 2
+            $.get("/get_units/" + faction2, function(data) {
+                var unit2Select = document.getElementById('unit2');
+                unit2Select.innerHTML = ''; // Clear existing options
+                data.units.forEach(function(unit) {
+                    var option = document.createElement('option');
+                    option.value = unit;
+                    option.text = unit;
+                    unit2Select.appendChild(option);
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Warhammer 40K Simulator - Select Units</h1>
+    </header>
+
+    <form action="{{ url_for('start_game') }}" method="POST">
+        <label for="faction1">Choose Faction 1:</label>
+        <select name="faction1" id="faction1" onchange="updateUnits()">
+            {% for faction in factions %}
+                <option value="{{ faction }}">{{ faction }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="unit1">Choose Unit for Faction 1:</label>
+        <select name="unit1" id="unit1">
+            <!-- Units will be loaded here -->
+        </select><br><br>
+
+        <label for="faction2">Choose Faction 2:</label>
+        <select name="faction2" id="faction2" onchange="updateUnits()">
+            {% for faction in factions %}
+                <option value="{{ faction }}">{{ faction }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="unit2">Choose Unit for Faction 2:</label>
+        <select name="unit2" id="unit2">
+            <!-- Units will be loaded here -->
+        </select><br><br>
+
+        <button type="submit">Start Game</button>
+    </form>
+</body>
+</html>
+
